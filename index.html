@@ -2,17 +2,14 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>AOT – All-Ones-Time</title>
+<title>AOT – Demo App</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
+* { box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
 
 body {
     margin: 0;
-    background: #000;
+    background: #0f0f0f;
     color: #fff;
     overflow: hidden;
 }
@@ -25,108 +22,68 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 100;
-    animation: fadeOut 1s ease forwards;
-    animation-delay: 2.2s;
+    z-index: 10;
+    animation: splashOut 1s ease forwards;
+    animation-delay: 2s;
 }
-
-#logo {
+#splash h1 {
     font-size: 64px;
-    letter-spacing: 6px;
-    animation: logoIn 1.8s ease forwards;
+    letter-spacing: 8px;
+    animation: logoIn 1.5s ease;
 }
 
 @keyframes logoIn {
-    0% { opacity: 0; transform: scale(0.6); }
-    100% { opacity: 1; transform: scale(1); }
+    from { opacity: 0; transform: scale(0.6); }
+    to { opacity: 1; transform: scale(1); }
 }
-
-@keyframes fadeOut {
+@keyframes splashOut {
     to { opacity: 0; pointer-events: none; }
 }
 
 /* APP */
-.app {
+#app {
+    height: 100vh;
     display: flex;
-    width: 200vw;
-    height: 100vh;
-    transition: transform 0.8s ease-in-out;
+    flex-direction: column;
+    animation: fadeIn 1s ease;
 }
 
-/* SCREENS */
-.screen {
-    width: 100vw;
-    height: 100vh;
-    padding: 60px;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-/* LOGIN */
-.login {
-    background: #0e0e0e;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-}
-
-h1 {
-    margin-bottom: 30px;
-}
-
-label {
-    color: #aaa;
-    display: block;
-    margin-top: 15px;
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    background: #1c1c1c;
-    border: none;
-    border-radius: 8px;
-    color: white;
-}
-
-button {
-    margin-top: 30px;
-    padding: 14px;
-    width: 100%;
-    background: white;
-    color: black;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-/* START */
-.start {
-    background: #0f0f0f;
-    overflow-y: auto;
-}
-
+/* NAV */
 nav {
     display: flex;
     gap: 40px;
-    padding-bottom: 30px;
-    position: sticky;
-    top: 0;
-    background: #0f0f0f;
+    padding: 20px 60px;
+    background: #000;
 }
-
-nav a {
-    color: #bbb;
-    text-decoration: none;
+nav span {
+    cursor: pointer;
+    color: #aaa;
     font-weight: 600;
 }
-
-nav a:hover {
-    color: white;
+nav span.active,
+nav span:hover {
+    color: #fff;
 }
 
-.section {
-    margin-bottom: 40px;
+/* CONTENT */
+#content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 30px 60px;
+    animation: slideIn 0.5s ease;
 }
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section { margin-bottom: 40px; }
 
 .row {
     display: flex;
@@ -134,6 +91,7 @@ nav a:hover {
     overflow-x: auto;
 }
 
+/* CARDS */
 .card {
     min-width: 260px;
     height: 150px;
@@ -142,11 +100,9 @@ nav a:hover {
     padding: 14px;
     transition: transform 0.3s;
 }
+.card:hover { transform: scale(1.08); }
 
-.card:hover {
-    transform: scale(1.08);
-}
-
+/* MUSIC */
 .music {
     min-width: 140px;
     height: 140px;
@@ -155,9 +111,21 @@ nav a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
     text-align: center;
+    font-size: 13px;
     padding: 10px;
+}
+
+/* UPLOAD */
+.upload {
+    margin-bottom: 20px;
+}
+.upload input {
+    background: #1c1c1c;
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 8px;
 }
 </style>
 </head>
@@ -165,72 +133,95 @@ nav a:hover {
 <body>
 
 <!-- SPLASH -->
-<div id="splash">
-    <div id="logo">AOT</div>
-</div>
+<div id="splash"><h1>AOT</h1></div>
 
-<!-- APP -->
-<div class="app" id="app">
+<div id="app">
 
-<!-- LOGIN -->
-<div class="screen login">
-    <div>
-        <h1>LOGIN</h1>
-        <label>Email</label>
-        <input>
-        <label>Passwort</label>
-        <input type="password">
-        <button onclick="goStart()">LOGIN</button>
-    </div>
+<nav>
+    <span onclick="setView('start')" class="active">Start</span>
+    <span onclick="setView('film')">Filme</span>
+    <span onclick="setView('serie')">Serien</span>
+    <span onclick="setView('musik')">Musik</span>
+</nav>
 
-    <div>
-        <h1>Account erstellen</h1>
-        <label>Name</label>
-        <input>
-        <label>Email</label>
-        <input>
-        <button onclick="goStart()">ACCOUNT ERSTELLEN</button>
-    </div>
-</div>
-
-<!-- START -->
-<div class="screen start">
-    <nav>
-        <a>Film</a>
-        <a>Serie</a>
-        <a>Start</a>
-        <a>Musik</a>
-        <a>CC</a>
-    </nav>
-
-    <div class="section">
-        <h2>AOT Originals</h2>
-        <div class="row">
-            <div class="card">NEON CITY<br>Season 1</div>
-            <div class="card">BLACK SIGNAL<br>Limited Series</div>
-            <div class="card">LAST HORIZON<br>Film</div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Soundtracks</h2>
-        <div class="row">
-            <div class="music">Echoes of Neon</div>
-            <div class="music">Midnight Run</div>
-            <div class="music">Silent Frame</div>
-            <div class="music">After Credits</div>
-        </div>
-    </div>
-</div>
+<div id="content"></div>
 
 </div>
 
 <script>
-function goStart() {
-    document.getElementById("app").style.transform = "translateX(-100vw)";
+let currentView = "start";
+
+let songs = ["Echoes of Neon", "Midnight Run", "Silent Frame"];
+
+function setView(view) {
+    currentView = view;
+    document.querySelectorAll("nav span").forEach(el => el.classList.remove("active"));
+    event.target.classList.add("active");
+    render();
 }
+
+function render() {
+    const c = document.getElementById("content");
+    c.innerHTML = "";
+
+    if (currentView === "start") {
+        c.innerHTML = `
+        <div class="section">
+            <h2>AOT Originals</h2>
+            <div class="row">
+                <div class="card">NEON CITY<br>Film</div>
+                <div class="card">BLACK SIGNAL<br>Serie</div>
+                <div class="card">LAST HORIZON<br>Film</div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Soundtracks</h2>
+            <div class="row">
+                ${songs.map(s => `<div class="music">${s}</div>`).join("")}
+            </div>
+        </div>`;
+    }
+
+    if (currentView === "film") {
+        c.innerHTML = `
+        <h2>Filme</h2>
+        <div class="row">
+            <div class="card">LAST HORIZON</div>
+            <div class="card">NEON CITY</div>
+        </div>`;
+    }
+
+    if (currentView === "serie") {
+        c.innerHTML = `
+        <h2>Serien</h2>
+        <div class="row">
+            <div class="card">BLACK SIGNAL</div>
+            <div class="card">DARK ZONE</div>
+        </div>`;
+    }
+
+    if (currentView === "musik") {
+        c.innerHTML = `
+        <div class="upload">
+            <input type="text" id="songInput" placeholder="Song Name eingeben">
+            <button onclick="addSong()">Hochladen</button>
+        </div>
+        <div class="row">
+            ${songs.map(s => `<div class="music">${s}</div>`).join("")}
+        </div>`;
+    }
+}
+
+function addSong() {
+    const input = document.getElementById("songInput");
+    if (input.value.trim() !== "") {
+        songs.push(input.value);
+        render();
+    }
+}
+
+render();
 </script>
 
 </body>
 </html>
-
